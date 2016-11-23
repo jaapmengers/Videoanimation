@@ -1,5 +1,4 @@
-<video id="v0" autobuffer preload width="800">
-    <source type="video/mp4; codecs=&quot;avc1.42E01E, mp4a.40.2&quot;" src="360.mp4"></source>
+<video id="v0" preload width="800">
 </video>
 <br/>
 <button onclick="linear()">Animeer</button> <button onclick="animateWithEasing()">Animeer met easing</button>
@@ -81,12 +80,6 @@
     }
   }
 
-  var vid;
-
-  window.onload = () => {
-    vid = document.getElementById('v0');
-  }
-
   function linear() {
     Animations.linear(5000, (percentage) => {
       vid.currentTime = percentage * time;
@@ -97,6 +90,31 @@
     Animations.easeInOutQuint(5000, (percentage) => {
       vid.currentTime = percentage * time;
     });
+  }
+
+  function preloadVideo() {
+    var req = new XMLHttpRequest();
+    req.open('GET', '360.mp4', true);
+    req.responseType = 'blob';
+
+    req.onload = function() {
+     if (this.status === 200) {
+      var videoBlob = this.response;
+      var vidSrc = URL.createObjectURL(videoBlob);
+
+      vid.src = vidSrc;
+     }
+    }
+
+    req.send();
+  }
+
+  var vid;
+
+  window.onload = () => {
+    vid = document.getElementById('v0');
+
+    preloadVideo();
   }
 
 </script>
